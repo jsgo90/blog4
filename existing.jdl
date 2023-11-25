@@ -1,0 +1,76 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName blog
+    blueprints []
+    buildTool maven
+    cacheProvider no
+    clientFramework angularX
+    clientPackageManager npm
+    clientTheme none
+    creationTimestamp 1698380698770
+    databaseType sql
+    devDatabaseType h2Memory
+    dtoSuffix DTO
+    enableGradleEnterprise false
+    enableHibernateCache false
+    enableSwaggerCodegen false
+    enableTranslation false
+    gradleEnterpriseHost ""
+    jhiPrefix jhi
+    jhipsterVersion "7.9.4"
+    jwtSecretKey "NTBiOGMwMGM1YmZlYmU5OTU5NTNiZTVjMjE0Nzc4YTNhM2IxYjFiYWY0NzdkYTJkNzJiN2NlNjQ0OWQwZmVlYzJhMzllM2QwOGRkMjE1Y2Q5OWRhMTZmMDVhOGM3YWI3NDZhYTdmZjhmODA0YjgyNmNhZjlkNzNlNzAyYWI0NDk="
+    languages [en, fr]
+    messageBroker false
+    microfrontend false
+    microfrontends []
+    nativeLanguage en
+    otherModules []
+    packageName com.um.blog
+    prodDatabaseType mariadb
+    reactive false
+    searchEngine false
+    serverPort 8080
+    serviceDiscoveryType no
+    skipClient false
+    skipUserManagement false
+    testFrameworks []
+    websocket false
+    withAdminUi true
+  }
+  entities *
+} 
+
+entity Blog {
+  name String required minlength(3)
+  description String required minlength(1) maxlength(100)
+}
+
+entity Post {
+  title String required
+  content TextBlob required
+  date Instant required
+}
+
+entity Tag {
+  name String required minlength(2)
+}
+
+entity Comment {
+  content TextBlob required 
+}
+
+relationship ManyToOne {
+  Blog{user(login)} to User
+  Post{blog(name)} to Blog
+  Comment{post(title)} to Post
+}
+
+relationship ManyToMany {
+  Post{tag(name)} to Tag{entry}
+}
+
+paginate Post, Tag with infinite-scroll
+
+
