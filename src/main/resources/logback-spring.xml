@@ -12,11 +12,12 @@
 
     <!-- File Appender -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/application.log</file>
+        <file>application.log</file>
         <encoder>
             <pattern>%msg%n</pattern>
         </encoder>
     </appender>
+    
 
     <!-- Root Logger -->
     <root level="info">
