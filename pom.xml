@@ -561,7 +561,7 @@
 							</platforms>
 						</from>
 						<to>
-							<image>blog:latest</image>
+							<image>jsgarciaojeda/blog:latest</image>
 							<tags>
 								<tag>${project.version}</tag>
 								<tag>latest</tag>
