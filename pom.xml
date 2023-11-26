@@ -597,10 +597,10 @@
 							</permissions>
 						</extraDirectories>
 						<extraDirectories>
-							<paths>logs</paths>
+							<paths></paths>
 							<permissions>
 								<permission>
-									<file>/application.log</file>
+									<file>/logs</file>
 									<mode>755</mode>
 								</permission>
 							</permissions>
