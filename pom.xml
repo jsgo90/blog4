@@ -596,15 +596,6 @@
 								</permission>
 							</permissions>
 						</extraDirectories>
-						<extraDirectories>
-							<paths></paths>
-							<permissions>
-								<permission>
-									<file>/logs</file>
-									<mode>755</mode>
-								</permission>
-							</permissions>
-						</extraDirectories>	
 					</configuration>
 				</plugin>
 				<plugin>
