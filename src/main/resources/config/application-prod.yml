@@ -33,17 +33,16 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://localhost:3306/blog?useLegacyDatetimeCode=false&serverTimezone=UTC
-    username: root
-    password: root
+    url: jdbc:h2:mem:blog;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=LEGACY
+    username: blog
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
+  h2:
+    console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
+      enabled: false
   jpa:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
