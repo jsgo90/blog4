@@ -68,7 +68,7 @@ export class BlogComponent implements OnInit {
   // Intentar cargar desde caché primero
   this.loadFromCache().subscribe({
     next: (cachedData: EntityArrayResponseType | null) => {
-      if (cachedData) {
+      if (!navigator.onLine && cachedData) {
         // Los datos están en caché, manejarlos
         this.onResponseSuccess(cachedData);
       } else {
@@ -90,7 +90,7 @@ loadFromCache(): Observable<EntityArrayResponseType | null> {
   return from(
     caches.open(cacheName).then((cache) => {
       // Intentar recuperar la solicitud desde la caché
-      return cache.match('URL_DE_TU_API_ENDPOINT').then((response) => {
+      return cache.match('/api/blogs/').then((response) => {
         if (response) {
           // Si se encuentra en caché, devolver los datos
           return response.json();
