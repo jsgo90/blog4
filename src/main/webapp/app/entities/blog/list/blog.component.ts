@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
 import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { from } from 'rxjs';
 
 import { IBlog } from '../blog.model';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
@@ -49,7 +50,7 @@ export class BlogComponent implements OnInit {
         },
       });
   }
-
+/*
   load(): void {
     this.loadFromBackendWithRouteInformations().subscribe({
       next: (res: EntityArrayResponseType) => {
@@ -61,6 +62,51 @@ export class BlogComponent implements OnInit {
   navigateToWithComponentValues(): void {
     this.handleNavigation(this.predicate, this.ascending);
   }
+*/
+
+ load(): void {
+  // Intentar cargar desde caché primero
+  this.loadFromCache().subscribe({
+    next: (cachedData: EntityArrayResponseType | null) => {
+      if (cachedData) {
+        // Los datos están en caché, manejarlos
+        this.onResponseSuccess(cachedData);
+      } else {
+        // No se encontraron datos en caché, cargar desde el backend
+        this.loadFromBackendWithRouteInformations().subscribe({
+          next: (res: EntityArrayResponseType) => {
+            this.onResponseSuccess(res);
+          },
+        });
+      }
+    },
+  });
+}
+
+loadFromCache(): Observable<EntityArrayResponseType | null> {
+  // Nombre de la caché que deberías haber utilizado para almacenar estos datos
+  const cacheName = 'miCache';
+
+  return from(
+    caches.open(cacheName).then((cache) => {
+      // Intentar recuperar la solicitud desde la caché
+      return cache.match('URL_DE_TU_API_ENDPOINT').then((response) => {
+        if (response) {
+          // Si se encuentra en caché, devolver los datos
+          return response.json();
+        }
+        // Si no se encuentra en caché, devolver nulo
+        return null;
+      });
+    })
+  );
+}
+
+navigateToWithComponentValues(): void {
+  this.handleNavigation(this.predicate, this.ascending);
+}
+
+
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
