@@ -42,16 +42,10 @@ export class BlogService {
     // Nombre de la caché que deberías haber utilizado para almacenar estos datos
     const cacheName = 'miCache';
     
-    const exampleData = {
-	    id: 1,
-	    title: 'Ejemplo de Blog',
-	    content: 'Este es un blog de ejemplo',
-    };
-
     if (blog) {
       // Abre la caché y almacena el nuevo blog solo si no es nulo
       caches.open(cacheName).then((cache) => {
-        const response = new Response(JSON.stringify(exampleData));
+        const response = new Response(JSON.stringify(blog));
         cache.put('/api/blogs/', response);
       });
     }
