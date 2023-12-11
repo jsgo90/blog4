@@ -46,7 +46,7 @@ export class BlogService {
       // Abre la caché y almacena el nuevo blog solo si no es nulo
       caches.open(cacheName).then((cache) => {
         const response = new Response(JSON.stringify(blog));
-        cache.put('URL_DE_TU_API_ENDPOINT', response);
+        cache.put('/api/blogs/', response);
       });
     }
   }
