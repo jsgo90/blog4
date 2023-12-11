@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -18,8 +19,36 @@ export class BlogService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
+/*
   create(blog: NewBlog): Observable<EntityResponseType> {
     return this.http.post<IBlog>(this.resourceUrl, blog, { observe: 'response' });
+  }
+*/
+  create(blog: NewBlog): Observable<EntityResponseType> {
+    // Realizar la creación del blog en el servidor
+    return this.http.post<IBlog>(this.resourceUrl, blog, { observe: 'response' })
+      .pipe(
+        // Manipular la respuesta del servidor
+        switchMap((response) => {
+          // Después de la creación en el servidor, intentar escribir en la caché
+          this.addToCache(response.body);
+          // Devolver la respuesta original del servidor
+          return of(response);
+        })
+     );
+  }
+
+  addToCache(blog: IBlog | null): void {
+    // Nombre de la caché que deberías haber utilizado para almacenar estos datos
+    const cacheName = 'miCache';
+
+    if (blog) {
+      // Abre la caché y almacena el nuevo blog solo si no es nulo
+      caches.open(cacheName).then((cache) => {
+        const response = new Response(JSON.stringify(blog));
+        cache.put('URL_DE_TU_API_ENDPOINT', response);
+      });
+    }
   }
 
   update(blog: IBlog): Observable<EntityResponseType> {
